@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PaymentBase(BaseModel):
@@ -14,7 +14,8 @@ class PaymentBase(BaseModel):
 
 
 class PaymentCreate(PaymentBase):
-    pass
+    payment_method: str = Field(min_length=1)
+    amount: Decimal = Field(gt=0)
 
 
 class PaymentResponse(PaymentBase):

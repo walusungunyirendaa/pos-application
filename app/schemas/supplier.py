@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class SupplierBase(BaseModel):
@@ -11,7 +11,8 @@ class SupplierBase(BaseModel):
 
 
 class SupplierCreate(SupplierBase):
-    pass
+    supplier_name: str = Field(min_length=1)
+    phone: str = Field(min_length=1)
 
 
 class SupplierResponse(SupplierBase):

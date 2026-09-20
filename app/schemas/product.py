@@ -1,6 +1,6 @@
 from decimal import Decimal
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ProductBase(BaseModel):
@@ -16,7 +16,12 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    pass
+    sku: str = Field(min_length=1)
+    name: str = Field(min_length=1)
+    price: Decimal = Field(ge=0)
+    cost_price: Optional[Decimal] = Field(default=None, ge=0)
+    quantity_in_stock: int = Field(default=0, ge=0)
+    reorder_level: Optional[int] = Field(default=None, ge=0)
 
 
 class ProductResponse(ProductBase):

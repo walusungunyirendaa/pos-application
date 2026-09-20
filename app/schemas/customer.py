@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CustomerBase(BaseModel):
@@ -11,7 +11,9 @@ class CustomerBase(BaseModel):
 
 
 class CustomerCreate(CustomerBase):
-    pass
+    first_name: str = Field(min_length=1)
+    last_name: str = Field(min_length=1)
+    loyalty_points: Optional[int] = Field(default=0, ge=0)
 
 
 class CustomerResponse(CustomerBase):

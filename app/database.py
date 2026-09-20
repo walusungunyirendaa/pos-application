@@ -1,10 +1,22 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.pool import StaticPool
 
-DATABASE_URL = "postgresql://postgres:postgres@localhost/pos_db"
+from config import settings
 
-engine = create_engine(DATABASE_URL)
+DATABASE_URL = settings.DATABASE_URL
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+if DATABASE_URL.startswith("sqlite"):
+    engine_kwargs = {"connect_args": {"check_same_thread": False}}
+    if DATABASE_URL in ("sqlite://", "sqlite:///:memory:"):
+        engine_kwargs["poolclass"] = StaticPool
+else:
+    engine_kwargs = {"pool_pre_ping": True, "pool_recycle": 300}
+
+engine = create_engine(DATABASE_URL, **engine_kwargs)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

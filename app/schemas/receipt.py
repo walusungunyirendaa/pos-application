@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ReceiptBase(BaseModel):
@@ -11,7 +11,7 @@ class ReceiptBase(BaseModel):
 
 
 class ReceiptCreate(ReceiptBase):
-    pass
+    receipt_number: str = Field(min_length=1)
 
 
 class ReceiptResponse(ReceiptBase):
